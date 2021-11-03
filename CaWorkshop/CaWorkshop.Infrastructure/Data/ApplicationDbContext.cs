@@ -25,4 +25,13 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder
+            .LogTo(Console.WriteLine)
+            .EnableDetailedErrors();
+
+        base.OnConfiguring(optionsBuilder);
+    }
 }
