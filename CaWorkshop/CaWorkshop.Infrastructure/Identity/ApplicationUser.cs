@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace CaWorkshop.WebUI.Models;
+namespace CaWorkshop.Infrastructure.Identity;
 
 public class ApplicationUser : IdentityUser
 {
-    
 }
