@@ -1,82 +1,43 @@
-﻿using CaWorkshop.Domain.Entities;
-using CaWorkshop.Infrastructure.Data;
+﻿using CaWorkshop.Application.TodoItems.Commands.CreateTodoItem;
+using CaWorkshop.Application.TodoItems.Commands.DeleteTodoItem;
+using CaWorkshop.Application.TodoItems.Commands.UpdateTodoItem;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace CaWorkshop.WebUI.Controllers
+namespace CaWorkshop.WebUI.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class TodoItemsController : ApiControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TodoItemsController : ControllerBase
+    // POST: api/TodoItems
+    [HttpPost]
+    public async Task<ActionResult<int>> PostTodoItem(
+        CreateTodoItemCommand command)
     {
-        private readonly ApplicationDbContext _context;
+        return await Mediator.Send(command);
+    }
 
-        public TodoItemsController(ApplicationDbContext context)
+    // PUT: api/TodoItems/5
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutTodoItem(int id,
+        UpdateTodoItemCommand command)
+    {
+        if (id != command.Id)
         {
-            _context = context;
+            return BadRequest();
         }
 
-        // PUT: api/TodoItems/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem(int id, TodoItem todoItem)
-        {
-            if (id != todoItem.Id)
-            {
-                return BadRequest();
-            }
+        await Mediator.Send(command);
 
-            _context.Entry(todoItem).State = EntityState.Modified;
+        return NoContent();
+    }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TodoItemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+    // DELETE: api/TodoItems/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTodoItem(int id)
+    {
+        await Mediator.Send(new DeleteTodoItemCommand { Id = id });
 
-            return NoContent();
-        }
-
-        // POST: api/TodoItems
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<int>> PostTodoItem(TodoItem todoItem)
-        {
-            _context.TodoItems.Add(todoItem);
-            await _context.SaveChangesAsync();
-
-            return todoItem.Id;
-        }
-
-        // DELETE: api/TodoItems/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTodoItem(int id)
-        {
-            var todoItem = await _context.TodoItems.FindAsync(id);
-            if (todoItem == null)
-            {
-                return NotFound();
-            }
-
-            _context.TodoItems.Remove(todoItem);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool TodoItemExists(int id)
-        {
-            return _context.TodoItems.Any(e => e.Id == id);
-        }
+        return NoContent();
     }
 }
