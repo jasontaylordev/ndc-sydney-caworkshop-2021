@@ -12,7 +12,8 @@ const PROXY_CONFIG = [
       "/Identity",
       "/connect",
       "/ApplyDatabaseMigrations",
-      "/api"
+      "/api",
+      "/swagger"
    ],
     target: target,
     secure: false
