@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CaWorkshop.WebUI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211103004423_Todo")]
+    [Migration("20211102004423_Todo")]
     partial class Todo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
