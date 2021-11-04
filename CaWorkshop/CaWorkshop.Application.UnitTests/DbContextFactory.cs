@@ -19,14 +19,9 @@ public static class DbContextFactory
         var operationalStoreOptions = Options.Create(
             new OperationalStoreOptions());
 
-        var currentUserServiceMock = new Mock<ICurrentUserService>();
-        currentUserServiceMock.Setup(m => m.UserId)
-            .Returns(Guid.Empty.ToString());
-
         var context = new ApplicationDbContext(
             options,
-            operationalStoreOptions,
-            currentUserServiceMock.Object);
+            operationalStoreOptions);
 
         var initialiser = new ApplicationDbContextInitialiser(context);
 
