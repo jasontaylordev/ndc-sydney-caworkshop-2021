@@ -38,6 +38,8 @@ public static class ConfigureServices
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+        services.AddLogging(builder => builder.AddSeq());
+
         return services;
     }
 }
