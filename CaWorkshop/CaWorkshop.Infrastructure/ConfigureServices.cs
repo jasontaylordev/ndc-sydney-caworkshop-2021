@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using CaWorkshop.Application.Common.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace CaWorkshop.Infrastructure;
 
@@ -23,6 +24,7 @@ public static class ConfigureServices
         services.AddScoped<ApplicationDbContextInitialiser>();
 
         services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         services.AddIdentityServer()
@@ -30,6 +32,8 @@ public static class ConfigureServices
 
         services.AddAuthentication()
             .AddIdentityServerJwt();
+
+        services.AddScoped<IIdentityService, IdentityService>();
 
         return services;
     }

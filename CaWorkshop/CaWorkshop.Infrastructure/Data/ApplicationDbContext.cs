@@ -2,6 +2,7 @@
 using CaWorkshop.Application.Common.Interfaces;
 using CaWorkshop.Domain.Entities;
 using CaWorkshop.Infrastructure.Identity;
+using CaWorkshop.Infrastructure.Persistence.Interceptors;
 using Duende.IdentityServer.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,15 @@ namespace CaWorkshop.Infrastructure.Data;
 
 public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
 {
+    private readonly AuditEntitiesSaveChangesInterceptor _auditEntitiesSaveChangesInterceptor;
+
     public ApplicationDbContext(
         DbContextOptions options,
-        IOptions<OperationalStoreOptions> operationalStoreOptions)
+        IOptions<OperationalStoreOptions> operationalStoreOptions,
+        ICurrentUserService currentUserService)
         : base(options, operationalStoreOptions)
     {
+        _auditEntitiesSaveChangesInterceptor = new AuditEntitiesSaveChangesInterceptor(currentUserService);
     }
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
@@ -32,7 +37,8 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
     {
         optionsBuilder
             .LogTo(Console.WriteLine)
-            .EnableDetailedErrors();
+            .EnableDetailedErrors()
+            .AddInterceptors(_auditEntitiesSaveChangesInterceptor);
 
         base.OnConfiguring(optionsBuilder);
     }

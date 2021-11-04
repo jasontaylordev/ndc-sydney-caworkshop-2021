@@ -1,5 +1,8 @@
-﻿namespace CaWorkshop.Application.TodoLists.Commands.DeleteTodoList;
+﻿using CaWorkshop.Application.Common.Security;
 
+namespace CaWorkshop.Application.TodoLists.Commands.DeleteTodoList;
+
+[Authorise]
 public class DeleteTodoListCommand : IRequest
 {
     public int Id { get; set; }

@@ -1,8 +1,10 @@
 ﻿using System;
+using CaWorkshop.Application.Common.Interfaces;
 using CaWorkshop.Infrastructure.Data;
 using Duende.IdentityServer.EntityFramework.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Moq;
 
 namespace CaWorkshop.Application.UnitTests;
 
@@ -17,8 +19,14 @@ public static class DbContextFactory
         var operationalStoreOptions = Options.Create(
             new OperationalStoreOptions());
 
+        var currentUserServiceMock = new Mock<ICurrentUserService>();
+        currentUserServiceMock.Setup(m => m.UserId)
+            .Returns(Guid.Empty.ToString());
+
         var context = new ApplicationDbContext(
-            options, operationalStoreOptions);
+            options,
+            operationalStoreOptions,
+            currentUserServiceMock.Object);
 
         var initialiser = new ApplicationDbContextInitialiser(context);
 
