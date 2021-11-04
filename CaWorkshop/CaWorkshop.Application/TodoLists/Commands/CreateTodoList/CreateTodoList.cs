@@ -1,4 +1,6 @@
-﻿namespace CaWorkshop.Application.TodoLists.Commands.CreateTodoList;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CaWorkshop.Application.TodoLists.Commands.CreateTodoList;
 
 public class CreateTodoListCommand : IRequest<int>
 {

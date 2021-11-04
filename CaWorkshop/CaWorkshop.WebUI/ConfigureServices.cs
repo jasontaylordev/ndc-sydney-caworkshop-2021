@@ -7,7 +7,9 @@ public static class ConfigureServices
         this IServiceCollection services)
     {
         services.AddDatabaseDeveloperPageExceptionFilter();
+
         services.AddControllersWithViews();
+
         services.AddRazorPages();
 
         services.AddOpenApiDocument(configure =>

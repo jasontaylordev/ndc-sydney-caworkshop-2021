@@ -1,4 +1,6 @@
-﻿namespace CaWorkshop.Application.TodoItems.Commands.CreateTodoItem;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CaWorkshop.Application.TodoItems.Commands.CreateTodoItem;
 
 public class CreateTodoItemCommand : IRequest<int>
 {
